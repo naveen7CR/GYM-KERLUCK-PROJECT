@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import EnquiryForm from './EnquiryForm'; // ✅ Ye line sahi hai
 import logo from './assets/kerluck-logo.jpeg';
 import sudheeshImg from './assets/trainers/sudheesh.jpg';
 import trainer2Img from './assets/trainers/trainer2.jpg';
@@ -60,7 +61,7 @@ const plans = [
 const faqs = [
   ['What are the gym timings?', 'We are open Monday to Saturday, 6:00 AM to 10:00 PM. Sunday is closed.'],
   ['Do I need to bring my own towel?', 'We provide fresh towels for our members. Just bring yourself and your workout gear!'],
-  ['Can I freeze my membership?', 'Yes, you can freeze your membership for up to 30 days per year with prior notice.'],
+  ['Can I freeze my membership?', 'Yes, you can freeze my membership for up to 30 days per year with prior notice.'],
   ['Is there a joining fee?', 'No joining fee! Just pay your first membership and start training immediately.'],
 ];
 
@@ -231,6 +232,9 @@ function App() {
           {faqs.map(([q, a]) => <div className="faq-item" key={q}><h3>{q}</h3><p>{a}</p></div>)}
         </div>
       </section>
+
+      {/* ✅ Yahan humne form add kar diya hai */}
+      <EnquiryForm />
 
       <footer className="footer">
         <div className="footer-grid">
