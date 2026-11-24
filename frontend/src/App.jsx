@@ -13,7 +13,7 @@ const links = [
   ['programs', 'PROGRAMS'], ['trainers', 'TRAINERS'], ['gallery', 'GALLERY'],
 ];
 
-const stats = [['500+', 'ACTIVE MEMBERS'], ['2', 'EXPERT TRAINERS'], ['5', 'TRAINING PROGRAMS'], ['5+', 'YEARS OF EXCELLENCE']];
+const stats = [['45+', 'ACTIVE MEMBERS'], ['2', 'EXPERT TRAINERS'], ['5', 'TRAINING PROGRAMS'], ['5+', 'YEARS OF EXCELLENCE']];
 
 const why = [
   ['🏋️', 'Quality Equipment', 'Well-maintained machines and free weights for every workout style.'],
