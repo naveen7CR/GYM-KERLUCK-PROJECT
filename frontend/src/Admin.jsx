@@ -10,7 +10,7 @@ export default function Admin() {
     const fetchEnquiries = async () => {
         try {
             // Direct URL hardcoded for testing
-            const API_URL = 'http://localhost:5001';
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
             const res = await fetch(`${API_URL}/api/enquiries?x-admin-key=${adminKey}`, {
                 method: 'GET'
