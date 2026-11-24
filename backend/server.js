@@ -5,21 +5,17 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
-// Middleware
-app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type', 'x-admin-key']
-}));
+// 🔥 CORS OPEN FOR ALL (Local testing fix)
+app.use(cors());
 app.use(express.json());
 
-// Rate Limiter for Enquiries
+// Rate Limiter
 const enquiryLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // Limit each IP to 10 requests per windowMs
-    message: { error: "Too many enquiries from this IP, please try again after 15 minutes." }
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: { error: "Too many enquiries from this IP, please try again later." }
 });
 
 // Database Schema
@@ -33,7 +29,7 @@ const enquirySchema = new mongoose.Schema({
 
 const Enquiry = mongoose.model('Enquiry', enquirySchema);
 
-// Routes
+// Health Check
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'ok', message: 'Kerluck Backend is running!' });
 });
@@ -50,7 +46,7 @@ app.post('/api/enquiries', enquiryLimiter, async (req, res) => {
         res.status(201).json({ success: true, message: 'Enquiry submitted successfully!' });
     } catch (error) {
         if (error.name === 'ValidationError') {
-            return res.status(400).json({ error: 'Invalid phone number. Must be 10 digits starting with 6-9.' });
+            return res.status(400).json({ error: 'Invalid phone number.' });
         }
         res.status(500).json({ error: 'Server error. Please try again later.' });
     }
@@ -59,7 +55,8 @@ app.post('/api/enquiries', enquiryLimiter, async (req, res) => {
 // GET: Read enquiries (Admin only)
 app.get('/api/enquiries', async (req, res) => {
     try {
-        const adminKey = req.headers['x-admin-key'];
+        const adminKey = req.query['x-admin-key'] || req.headers['x-admin-key'];
+
         if (!adminKey || adminKey !== process.env.ADMIN_KEY) {
             return res.status(401).json({ error: 'Unauthorized. Invalid admin key.' });
         }
@@ -70,7 +67,7 @@ app.get('/api/enquiries', async (req, res) => {
     }
 });
 
-// Connect to MongoDB and Start Server
+// Start Server
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('✅ Connected to MongoDB');
